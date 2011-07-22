@@ -1,0 +1,41 @@
+<div class="lift:surround?with=admin;at=content">
+	<div id="crud">
+		<div id="crudContent">
+			<div id="crudList" class="Comments">
+				<h2 id="crudListTitle">Comments</h2>
+				<div id="crudListSearch" style="background-color:#314660; border:0px;">
+					<form class="lift:Comments.search?form=post">
+						<input type="text" name="search" value="" /> 
+						<input type="submit" value="Search" /> 
+					</form>
+				</div>
+
+				<div id="crudListTable">
+					<table>
+						<thead>
+							<tr>
+								<th width="33.3333333333%"><a class="lift:Comments.sort crudSortedAsc"
+									href="/admin/comments/index?order=DESC">
+										Content </a></th>
+								<th width="33.3333333333%">
+										Related post </th>
+								<th width="33.3333333333%">
+										Author </th>
+							</tr>
+						</thead>
+						<tr class="lift:Comments.list">
+							<td><a href="/admin/comments/edit/1"> {short content} </a></td>
+							<td><span class="post-title">{post title}</span></td>
+							<td><span class="comment-author">{post author}</span></td>
+						</tr>
+					</table>
+				</div>
+
+				<div id="crudListPagination" style="background-color:#314660; border:0px;">
+					<p class="lift:Comments.count crudCount"><span>1</span> Comments</p>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>

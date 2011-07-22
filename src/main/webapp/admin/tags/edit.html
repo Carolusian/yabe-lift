@@ -1,0 +1,37 @@
+<div class="lift:surround?with=admin;at=content">
+    <div id="crud">
+        <div id="crudContent">
+            <div id="crudBlank" class="Tags">
+
+                <h2 id="crudBlankTitle">Edit Tag</h2>
+
+                <form class="lift:Tags.delete">
+					<input type="submit" value="Delete Tag" />
+				</form>
+
+                <div class="objectForm">
+                    <form class="lift:Tags.edit">
+                        <div class="lift:msgs?showAll=true"></div>
+                        <div class="crudField crud_text">
+                            <label for="object_name">
+                                Common name
+                            </label>
+                            <input id="object_name" class="" type="text" name="name" value="" size="50"/>
+
+                             <span class="crudHelp">
+                                Required.
+                             </span>
+                        </div>
+
+                        <p class="crudButtons">
+                            <input type="submit" name="_save" value="Save"/>
+                        </p>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

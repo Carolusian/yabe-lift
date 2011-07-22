@@ -1,0 +1,52 @@
+<div class="lift:surround?with=admin;at=content">
+    <div id="crud">
+    <div id="crudContent">
+        <div id="crudList" class="Tags">
+
+            <h2 id="crudListTitle">Tags</h2>
+
+            <div id="crudListSearch" style="background-color:#314660; border:0px;">
+                <form class="lift:Tags.search?form=post">
+                    <input type="text" name="search" value=""/>
+                    <input type="submit" value="Search"/>
+                </form>
+            </div>
+
+            <div id="crudListTable">
+
+                <table>
+                    <thead>
+                    <tr>
+                        <th>
+                            <a class="lift:Tags.sort" href="/admin/tags/index?order=DESC">
+                                Tags
+                            </a>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tr class="lift:Tags.list">
+                        <td>
+                            <a href="/admin/tags/4">{Tag name}</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="crudListPagination" style="background-color:#314660; border:0px;">
+
+                <p class="lift:Tags.count crudCount">
+                    <span>4</span> Tags
+                </p>
+
+            </div>
+
+            <p id="crudListAdd">
+                <a href="/admin/tags/add">Add Tag</a>
+            </p>
+
+        </div>
+    </div>
+
+    </div>
+</div>
+

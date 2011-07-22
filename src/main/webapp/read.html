@@ -1,0 +1,106 @@
+<div id="main" class="lift:surround?with=default;at=content">
+	<ul id="pagination">
+		<li id="previous" class="lift:Posts.prev">
+			<a href="/posts/3">The MVC application</a>
+		</li>
+        <li id="next" class="lift:Posts.next"> 
+            <a href="/posts/1">About the model layer</a> 
+        </li>
+	</ul>
+
+	<div class="lift:Posts.read post">
+		<h2 class="post-title">
+			<a href="/posts/1" class="post-title-link">About the model layer</a>
+		</h2>
+		<div class="post-metadata">
+			<span class="post-author">by Bob</span>, <span class="post-date">14
+				Jun 09</span> <span class="post-tags"> - Tagged <a
+				href="/posts/Play">Play</a>, <a href="/posts/Architecture">Architecture</a>
+			</span>
+		</div>
+		<div class="post-content">
+			<div class="about">Detail:</div>
+			<span class="post-content-span">The model has a central position in a Play! application. It is the
+			domain-specific representation of the information on which the
+			application operates.<br /> <br />Martin fowler defines it as :<br />
+			<br />Responsible for representing concepts of the business,
+			information about the business situation, and business rules. State
+			that reflects the business situation is controlled and used here,
+			even though the technical details of storing it are delegated to the
+			infrastructure. This layer is the heart of business software.<br />
+			</span>
+		</div>
+	</div>
+
+	<div class="lift:comet?type=CommentsList comments">
+		<h3 class="comment-count">2 comments</h3>
+
+		<div class="comment">
+			<div class="comment-metadata">
+				<span class="comment-author">by Guest,</span> <span
+					class="comment-date">14 Jun 09</span>
+			</div>
+			<div class="comment-content">
+				<div class="about">Detail:</div>
+				<span class="comment-content-span">You are right !<br /></span>
+			</div>
+		</div>
+	</div>
+	<div class="lift:Comments.initComet"></div>
+
+	<h3>Post a comment</h3>
+
+	<form class="lift:form.ajax">
+		<div class="lift:Comments.add">
+			<span id="error" class="error"></span>
+			<p>
+				<label for="author">Your name: </label> <input type="text"
+					name="author" id="author" value="" />
+			</p>
+			<p>
+				<label for="content">Your message: </label>
+				<textarea name="content" id="content"></textarea>
+			</p>
+			<p>
+				<label for="code">Please type the code below: </label> <img id="captcha"
+					src="/captcha" /> <br /> <input type="text" name="code" id="code"
+					size="18" value="" />
+			</p>
+			<p>
+				<input type="submit" value="Submit your comment" />
+			</p>
+		</div>
+	</form>
+	
+	<script type="text/javascript" charset="utf-8"> 
+	    $(function() {         
+	        // Expose the form 
+	        $('form').click(function() { 
+	            $('form').expose({api: true}).load(); 
+	        }); 
+	        
+	        $("#error").hide();
+	    });
+	    
+	    function clearError() {
+	    	$("#error").html("");
+	    	$("#error").hide();
+	    }
+	    
+	    function showError(msg) {
+	    	$("#error").html(msg);
+	    	$("#error").show();
+	    }
+	    
+	    //use a param to update captcha
+	    var update=0;
+	    
+	    function clearForm() {
+	    	$("#author").val("");
+	    	$("#content").val("");
+	    	$("#code").val("");
+	    	$("#captcha").attr("src","/captcha?update="+update);
+	    	update++;
+	    }
+	</script>
+</div>
