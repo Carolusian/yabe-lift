@@ -48,7 +48,7 @@ class Boot {
     def menus = List(
       Menu.i("Home") / "index", //>> User.AddUserMenusAfter,
       Menu.i("Read") / "read",
-
+      Menu.i("Posts by tag") / "posts",
       //Can be accessed by both users and admins
       Menu.i("My posts") / "admin" / "posts" / ** >> IfUserLoggedIn >> LocGroup("admin"),
 
@@ -99,6 +99,10 @@ class Boot {
       //read post
       case RewriteRequest(ParsePath("read" :: id :: Nil, _, _, _), _, _) =>
         RewriteResponse("read" :: Nil, Map("id" -> id))
+
+      //list posts by tag
+      case RewriteRequest(ParsePath("posts" :: tag :: Nil, _, _, _), _, _) =>
+        RewriteResponse("posts":: Nil, Map("tag" -> tag))
     }
 
     //Captcha function

@@ -1,10 +1,14 @@
 <div id="main" class="lift:surround?with=default;at=content">
-	<ul id="pagination">
+	<head_merge>
+        <title class="lift:Posts.title"></title>
+    </head_merge>
+
+    <ul id="pagination">
 		<li id="previous" class="lift:Posts.prev">
-			<a href="/posts/3">The MVC application</a>
+			<a href="/posts/3">{prev post}</a>
 		</li>
         <li id="next" class="lift:Posts.next"> 
-            <a href="/posts/1">About the model layer</a> 
+            <a href="/posts/1">{next post}</a>
         </li>
 	</ul>
 
@@ -14,8 +18,10 @@
 		</h2>
 		<div class="post-metadata">
 			<span class="post-author">by Bob</span>, <span class="post-date">14
-				Jun 09</span> <span class="post-tags"> - Tagged <a
-				href="/posts/Play">Play</a>, <a href="/posts/Architecture">Architecture</a>
+				Jun 09</span> <span class="post-tags">
+            <span class="post-tags">- Tagged
+                <a href="/posts/Play">Play</a>,
+                <a href="/posts/Architecture">Architecture</a></span>
 			</span>
 		</div>
 		<div class="post-content">

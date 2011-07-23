@@ -5,6 +5,7 @@ import net.liftweb.http._
 import net.liftweb.common._
 import net.liftweb.util._
 import scala.Predef._
+import code.comet.CommentsServer
 
 class Post extends LongKeyedMapper[Post] with IdPK {
   def getSingleton = Post
@@ -106,6 +107,49 @@ class Post extends LongKeyedMapper[Post] with IdPK {
 
     super.delete_!
   }
+
+  def countComments:Long = {
+    Comment.count(By(Comment.post, this.id))
+  }
+
+  def latestCommentAuthor:String = {
+    if(countComments <= 0)
+      ""
+    else {
+      val latest = Comment.find(By(Comment.post,this.id),
+        OrderBy(Comment.postedAt, Descending)).openTheBox
+
+      latest.author match {
+        case author if (author.length > 0) => ", lastest by "+latest.author
+        case _ => ", lastest by guest"
+      }
+    }
+  }
+
+  def showTagMetaStr:String = {
+    val postTags = PostTag.findAll(By(PostTag.post, this.id))
+    val tagNames = postTags.map { pt =>
+      val tag = Tag.find(By(Tag.id,pt.tag)).openTheBox
+      "<a href='/posts/"+tag.name.get+"'>"+tag.name.get+"</a>"
+    }
+    if(tagNames.length > 0)
+     " - tagged: " + tagNames.reduceLeft(_ + ", "+ _)
+    else
+      " - no tags"
+  }
 }
 
-object Post extends Post with LongKeyedMetaMapper[Post] with CRUDify[Long, Post]
+object Post extends Post with LongKeyedMetaMapper[Post] with CRUDify[Long, Post] {
+  def getPostsByTag(tag:String) = {
+    val tagId = Tag.find(By(Tag.name, tag)) match {
+      case Full(t) => t.id.get
+      case _ => -1
+    }
+
+    val posts =
+      Post.findAll(In(Post.id, PostTag.post,By(PostTag.tag,tagId)),
+      OrderBy(Post.id, Descending))
+
+    posts
+  }
+}

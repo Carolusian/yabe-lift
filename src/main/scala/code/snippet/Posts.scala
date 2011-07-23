@@ -18,13 +18,13 @@ class Posts {
       case Full(p) => {
         ".post-title-link [href]" #> ("/read/" + p.id) &
           ".post-title-link *" #> p.title.get &
-          ".post-author *" #> (p.author.getAuthor.firstName + " " +
+          ".post-author *" #> ("by " + p.author.getAuthor.firstName + " " +
             p.author.getAuthor.lastName) &
           ".post-date *" #> YabeHelper.fmtDateStr(p.postedAt.get) &
-          ".post-comments *" #> (" | " + "2 comments, lastest by aaaa") &
+          ".post-comments *" #> (" | " + p.countComments + " comments " + p.latestCommentAuthor) &
           "#post-content-span" #> Unparsed(p.content.is.replaceAll("\n", "<br />"))
       }
-      case _ => "#aa" #> <ha></ha>
+      case _ => "*" #> <span></span>
     }
   }
 
@@ -35,18 +35,45 @@ class Posts {
       case Full(p) => {
         val olderPosts = Post.findAll(OrderBy(Post.id, Descending)).
           filter(p.id != _.id)
-        "*" #> olderPosts.map {
-          p =>
-            ".post-title-link [href]" #> ("/read/" + p.id) &
-              ".post-title-link *" #> p.title.get &
-              ".post-author *" #> (p.author.getAuthor.firstName + " " +
-                p.author.getAuthor.lastName) &
-              ".post-date *" #> YabeHelper.fmtDateStr(p.postedAt.get)
-        }
+
+        renderPostsList(olderPosts)
       }
       case _ => "*" #> ""
     }
+  }
 
+  def listPostsByTag:CssSel = {
+    val posts = Post.getPostsByTag(S.param("tag") openOr "")
+
+    renderPostsList(posts)
+  }
+
+  def getTag:CssSel = {
+    "span" #> (S.param("tag") openOr "")
+  }
+
+  def titlePostsByTag:CssSel = {
+    "*" #> <title>{("Posts tagged with " + (S.param("tag") openOr ""))}</title>
+  }
+
+  private def renderPostsList(posts:List[Post]):CssSel = {
+   "*" #> posts.map {
+    p =>
+      ".post-title-link [href]" #> ("/read/" + p.id) &
+        ".post-title-link *" #> p.title.get &
+        ".post-author *" #> ("by " + p.author.getAuthor.firstName + " " +
+          p.author.getAuthor.lastName) &
+        ".post-date *" #> YabeHelper.fmtDateStr(p.postedAt.get) &
+        ".post-comments *" #> (" | " + p.countComments + " comments " + p.latestCommentAuthor)
+    }
+  }
+
+  def title:CssSel = {
+    val post = Post.find(By(Post.id, S.param("id").openTheBox.toLong))
+    post match {
+      case Full(p) => "*" #> <title>{p.title}</title>
+      case _ => "*" #> <title>invalid post</title>
+    }
   }
 
   def read: CssSel = {
@@ -56,9 +83,10 @@ class Posts {
       case Full(p) => {
         ".post-title-link [href]" #> ("/read/" + p.id) &
           ".post-title-link *" #> p.title.get &
-          ".post-author *" #> (p.author.getAuthor.firstName + " " +
+          ".post-author *" #> ("by " + p.author.getAuthor.firstName + " " +
             p.author.getAuthor.lastName) &
           ".post-date *" #> YabeHelper.fmtDateStr(p.postedAt.get) &
+          ".post-tags *" #> Unparsed(p.showTagMetaStr) &
           ".post-content-span" #> Unparsed(p.content.is.replaceAll("\n", "<br />"))
       }
       case _ => "*" #> ""

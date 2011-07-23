@@ -18,6 +18,7 @@ class CommentsList extends CometActor with CometListener {
   }
   
   def render = {
+    ".comment-count *" #> (comments.length + " comments") &
     ".comment" #> comments.map {
       c => 
         ".comment-author *" #> (c.author.get match {
