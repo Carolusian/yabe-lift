@@ -49,8 +49,6 @@ object YabeHelper {
                   BufferedImage.TYPE_INT_RGB)
     
     val g2d = bufferedImage.createGraphics()
-    val font = new Font("Georgia",Font.BOLD,18)
-    g2d.setFont(font)
     
     val rh = new RenderingHints(
            RenderingHints.KEY_ANTIALIASING,
