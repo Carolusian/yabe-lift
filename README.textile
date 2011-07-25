@@ -1,0 +1,7 @@
+I found playframework use yabe as its tutorial application. It is quite helpful for beginners who want to study playframework.
+
+For me, liftweb's comet feature is very attractive. This is the reason that I want to learn liftweb.
+
+Currently, the documentation of liftweb is a mass. So I want to do a tutorial about how to implement yabe in liftweb.
+
+Here is the source code about the application. I am going to start to write the tutorial later. 
