@@ -24,12 +24,8 @@ Manage articles, comments, tags and users.&nbsp;
 
 *Comet feature:*&nbsp;
 
-There is a comet feature demonstration at comment page. Just open a&nbsp;
+There is a comet feature demonstration at comment page. Just open a article at http://yabe.ayafish.com in two browsers at the same time.&nbsp;
 
-article at http://yabe.ayafish.com in two browsers at the same time.&nbsp;
-
-Then add a comment to the article in one of the browsers. You will see&nbsp;
-
-that comment appears in another browser in real-time without refresh.
+Then add a comment to the article in one of the browsers. You will see that comment appears in another browser in real-time without refresh.
 
 </p>
