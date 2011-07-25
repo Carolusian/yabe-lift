@@ -8,7 +8,7 @@ Here is the source code about the application. I am going to start to write the 
 
 <span class="Apple&lt;strike&gt;style&lt;/strike&gt;span" style="font&lt;strike&gt;family: arial, sans&lt;/strike&gt;serif; font&lt;strike&gt;size: 12px; color: rgb(0, 0, 0); "></span>
 
-<p>The source code is placed at "https://github.com/pkufashuo400/yabe-lift":https://github.com/pkufashuo400/yabe-lift&nbsp;
+<p>The source code is placed at "https://github.com/pkufashuo400/yabe-lift":https://github.com/pkufashuo400/yabe-lift
 
 Hope peoples who want to start to learn liftweb will like it.&nbsp;
 
