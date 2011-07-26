@@ -9,10 +9,12 @@ import java.util.Date
 import Helpers._
 import code.model._
 import code.lib._
+import MapperBinder._
 
 class Posts {
   def listLatest: CssSel = {
     val latestPost = Post.find(OrderBy(Post.id, Descending))
+    //"*" #> bindMapper()
 
     latestPost match {
       case Full(p) => {

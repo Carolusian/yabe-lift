@@ -43,8 +43,8 @@ How to implement a MapperBinder:
     
 		[In next phase].
     <div>
-    <div class="MB:RecordName.fieldName1"></div>
-    <div class="MB:RecordName.fieldName2"></div>
+    <div class="mb:RecordName.fieldName1"></div>
+    <div class="mb:RecordName.fieldName2"></div>
     </div>
 		
 	Both of the two format should be ok.
