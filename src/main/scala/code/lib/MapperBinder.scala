@@ -5,37 +5,46 @@ import net.liftweb.http._
 import net.liftweb.common._
 import net.liftweb.util._
 import Helpers._
-import xml.{Group, Elem, NodeSeq}
+import xml.{Group, Elem, NodeSeq, Text, Node}
+import code.model.Post
+import xml.transform.{RuleTransformer, RewriteRule}
 
 trait MapperBinder {
-  def bindMapper[T <: Mapper[T]](data: Mapper[T])(in: NodeSeq): NodeSeq = {
-   /* in.foreach{ x =>
-      println("-------")
-      println(x)
-      println("-------")
-    }   */
+  def bindMapper(data: Post)(in: NodeSeq): NodeSeq = {
+    val tranformShow = new RewriteRule {
+      override def transform(n:Node):NodeSeq = n match {
+        //check if text has @fieldName
+        case e:Elem  => {
+          println(e + "|" + e.text)
+          new Elem(e.prefix,
+            e.label,
+            e.attributes,
+            e.scope,
+            data.title.asHtml)
+        }
 
-    /*val in2 = in.flatMap {
-      case e:Elem => {
 
+        case n => n
       }
-      case g:Group => {
-        println("===")
-        println(g)
-        println("=====")
-        g
-      }
-      case n => n
-    }  */
 
-    in.iterater.foreach{ x =>
-      println("-------")
-      println(x)
-      println("-------")
+      //check if it has sign '@'
+      def hasAt(s:String):Boolean = {
+        //regex for @fieldName
+        val r = """\s*\@[a-zA-Z0-9\_]+\s*""".r
+        val res = r.findAllIn(s)
+
+        if(res.length > 0 )
+          true
+        else
+          false
+      }
     }
 
-    ("*" #> <span>fdjsklfj</span>)(in)
+    new RuleTransformer(tranformShow).transform(in)
   }
+
+
+
 }
 
 object MapperBinder extends MapperBinder

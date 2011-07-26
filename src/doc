@@ -51,3 +51,5 @@ How to implement a MapperBinder:
 
 7. Example:
 "ACssAttribute" #> bindMapper(anObject, funcReturnCssSelThatBindOtherThings)
+
+8. input NodeSeq and Mapper, Replace attributes, text that contains @fieldName
