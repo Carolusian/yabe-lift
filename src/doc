@@ -31,3 +31,21 @@ Add some tags
 
 XSS
 getAuthor.openTheBox problem when there is not a author
+
+How to implement a MapperBinder:
+1. need to get the input nodeseq
+2. use class name as template container, find the elem by css class attribute
+3. bind use asHtml or toFrom to display content according gave css attribute
+4. specify whether there is special bindings
+5. if it is a form element in css attribute, use toFrom, otherwise ,use asHtml.
+6. <div><div class="mb:fieldName1"></div><div class="mb:fieldName2></div></div> , and
+
+    [In next phase].
+    <div>
+    <div class="MB:RecordName.fieldName1"></div>
+    <div class="MB:RecordName.fieldName2"></div>
+    </div>
+Both of the two format should be ok.
+
+7. Example:
+"ACssAttribute" #> bindMapper(anObject, funcReturnCssSelThatBindOtherThings)
