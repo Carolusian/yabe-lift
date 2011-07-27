@@ -35,10 +35,6 @@ class Post extends LongKeyedMapper[Post] with IdPK {
     override def validations = {
       valMinLen(1, "Please input title.") _ :: Nil
     }
-
-    override def asHtml() = {
-      <b>{super.asHtml}</b>
-    }
   }
 
   object content extends MappedText(this) {

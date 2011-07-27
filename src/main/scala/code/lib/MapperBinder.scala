@@ -11,7 +11,10 @@ import xml._
 import reflect.If
 
 trait MapperBinder {
-  def bindMapper[T<:Mapper[T]](data: Mapper[T])(in: NodeSeq): NodeSeq = {
+  def bindMapper[T<:Mapper[T]](data: Mapper[T])(in:NodeSeq):NodeSeq = {
+    bindMapper(data, "SomeThingThatShouldBeImpossibleToBeUsed" #> "")(in)
+  }
+  def bindMapper[T<:Mapper[T]](data: Mapper[T], otherBinding:CssSel)(in: NodeSeq): NodeSeq = {
     val tranformShow = new RewriteRule {
       override def transform(n:Node):NodeSeq = n match {
         //check if text has @fieldName
@@ -44,11 +47,8 @@ trait MapperBinder {
           nodeStr = nodeStr.replaceAllLiterally(m, fieldData )
         }
 
-        try {
-          XML.loadString(nodeStr)
-        } catch {
-          case _ => Text(nodeStr)
-        }
+        //Because asHtml is already safe, so asHtml.toString is also safe. Just use Unparsed to avoid parsing & to &amp;
+        Unparsed(nodeStr)
       }
 
       def getFieldForMatchFromData(m:String):String = {
@@ -57,7 +57,8 @@ trait MapperBinder {
 
         val field =  data.fieldByName(fieldName)
         field match {
-          case Full(f) => f.asInstanceOf[MappedField[_,T]].asHtml.toString
+          //replace @ to "&#64;", please note that you should also use "&#64;" instead of "@" in the templates
+          case Full(f) => f.asInstanceOf[MappedField[_,T]].asHtml.toString.replaceAllLiterally("@","&#64;")
           case _ => m
         }
       }
@@ -90,7 +91,7 @@ trait MapperBinder {
       ("."+classAttr) #> field.toForm
     }
 
-    tranformInput(new RuleTransformer(tranformShow).transform(in))
+    otherBinding(tranformInput(new RuleTransformer(tranformShow).transform(in)))
   }
 }
 

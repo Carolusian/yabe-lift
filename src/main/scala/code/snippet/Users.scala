@@ -8,6 +8,7 @@ import net.liftweb.mapper._
 import code.model._
 import Helpers._
 import code.lib._
+import code.lib.MapperBinder._
 
 class Users {
  
@@ -21,9 +22,10 @@ class Users {
     "#users" #> users.map{
       u => 
       odd=YabeHelper.oddOrEven(odd);
-      "tr [class]" #> odd &
-      "a [href]" #> ("/admin/users/edit/"+u.id.toString) &
-      "a *" #> u.email
+      ".user_item" #> {bindMapper(u,{
+        "tr [class]" #> odd
+      }) _}
+
     } 
   }
   
@@ -150,12 +152,15 @@ class UsersEdit extends StatefulSnippet {
         case errors => S.error(errors)
       }
     }
-    
-    "#email" #> SHtml.text(user.email,user.email.set(_)) &
+
+    "*" #> {bindMapper(user,{
+       "type=submit" #> SHtml.onSubmitUnit(process)
+    }) _}
+    /*"#email" #> SHtml.text(user.email,user.email.set(_)) &
     "#password" #> SHtml.password(user.password,user.password.set(_)) & 
     "#firstname" #> SHtml.text(user.firstName,user.firstName.set(_)) &
     "#lastname" #> SHtml.text(user.lastName,user.lastName.set(_)) &
     "#isAdmin" #> SHtml.checkbox(user.superUser, user.superUser.set(_)) &
-    "type=submit" #> SHtml.onSubmitUnit(process)
+    "type=submit" #> SHtml.onSubmitUnit(process)    */
   }
 }
