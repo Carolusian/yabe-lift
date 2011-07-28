@@ -3,11 +3,19 @@ package code.model
 import net.liftweb.common._
 import net.liftweb.mapper._
 import net.liftweb.util._
+import scala.xml.{NodeSeq,Text}
 
 class Comment extends LongKeyedMapper[Comment] with IdPK {
 	def getSingleton = Comment
 
-	object author extends MappedString(this,140)
+	object author extends MappedString(this,140) {
+    override def asHtml ={
+      this.get match {
+        case "" => Text("guest")
+        case _ => Text(this.get)
+      }
+    }
+  }
 	
 	object content extends MappedText(this) {
 	  override def validations = {
@@ -71,14 +79,14 @@ class Comment extends LongKeyedMapper[Comment] with IdPK {
 	    
 	    validatePost _ :: Nil
 	  }
-	  
-	  def getTitle = {
+
+    override def asHtml = {
 	    val post = Post.find(By(Post.id,this.get))
 	    post match {
-	      case Full(p) => p.title.get
-	      case _ => ""
+	      case Full(p) => Text(p.title.get)
+	      case _ => Text("")
 	    }
-	  }
+    }
 	}
 }
 

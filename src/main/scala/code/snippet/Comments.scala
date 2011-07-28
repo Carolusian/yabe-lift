@@ -12,6 +12,7 @@ import java.util.Date
 import Helpers._
 import code.model._
 import code.lib._
+import MapperBinder._
 import code.comet._
 
 class Comments {
@@ -65,17 +66,15 @@ class Comments {
   def list: CssSel = {
     val comments = getComments()
     var odd = "even"
+
     "tr" #> comments.map {
       c =>
         odd = YabeHelper.oddOrEven(odd);
-        "tr [class]" #> odd &
-          "a [href]" #> ("/admin/comments/edit/" + c.id) &
-          "a *" #> c.content.short &
-          ".post-title" #> (c.post.getTitle) &
-          ".comment-author" #> (c.author.get match {
-            case "" => "guest"
-            case _ => c.author.get
-          })
+        ".comment_item" #> {
+          bindMapper(c,{
+            "tr [class]" #> odd
+          }) _
+        }
     }
   }
 

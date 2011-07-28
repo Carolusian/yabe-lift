@@ -26,7 +26,7 @@ trait MapperBinder {
       }
 
       def replace(ns:NodeSeq):NodeSeq = {
-        val r = """\@[a-zA-Z0-9\_]+""".r
+        val r = """\@[a-zA-Z0-9\_]+(\.[a-zA-Z0-9\_]+){0,1}""".r
         ns flatMap { n =>
           val matches = r.findAllIn(n.toString).toList
           if(matches.length > 0) {
@@ -55,9 +55,17 @@ trait MapperBinder {
         val field =  data.fieldByName(fieldName)
         field match {
           //replace @ to "&#64;", please note that you should also use "&#64;" instead of "@" in the templates
-          case Full(f) => f.asInstanceOf[MappedField[_,T]].asHtml.toString.replaceAllLiterally("@","&#64;")
-          case _ => m
+          case Full(f) => f.asInstanceOf[MappedField[_,T]]
+            .asHtml
+            .toString
+            .replaceAllLiterally("@","&#64;")
+          case _ => invokeShowFunc(m)
         }
+      }
+
+      //tried to invoke field.method function that return a Node, otherwise, return
+      def invokeShowFunc(matchStr:String) = {
+
       }
     }
 
@@ -73,7 +81,7 @@ trait MapperBinder {
     }
 
     def isFieldValidate(classAttr:String):Boolean = {
-      val fieldName = classAttr.replace("mb:","")
+      val fieldName = classAttr.replaceAllLiterally("mb:","")
       val field = data.fieldByName(fieldName)
       field match {
         case Full(f) => {true}
@@ -82,7 +90,7 @@ trait MapperBinder {
     }
 
     def bindInputField(classAttr:String):CssSel = {
-      val fieldName = classAttr.replace("mb:","")
+      val fieldName = classAttr.replaceAllLiterally("mb:","")
       val field = data.fieldByName(fieldName).openTheBox
       //use dot to indicate that it is a class attribute
       ("."+classAttr) #> field.toForm
