@@ -165,10 +165,15 @@ class CommentsEdit extends StatefulSnippet {
       }
     }
 
-    "name=author" #> SHtml.text(comment.author, comment.author.set(_)) &
+    "*" #> {
+      bindMapper(comment, {
+        "type=submit" #> SHtml.onSubmitUnit(() => process)
+      }) _
+    }
+    /*"name=author" #> SHtml.text(comment.author, comment.author.set(_)) &
       "name=content" #> SHtml.textarea(comment.content, comment.content.set(_)) &
       "name=postedAt" #> SHtml.text(YabeHelper.fmtDateStr(comment.postedAt), comment.postedAt.setFromAny(_)) &
       "name=post_id" #> comment.post.toForm &
-      "type=submit" #> SHtml.onSubmitUnit(() => process)
+      "type=submit" #> SHtml.onSubmitUnit(() => process)*/
   }
 }

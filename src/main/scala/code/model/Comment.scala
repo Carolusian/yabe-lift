@@ -3,7 +3,7 @@ package code.model
 import net.liftweb.common._
 import net.liftweb.mapper._
 import net.liftweb.util._
-import scala.xml.{NodeSeq,Text}
+import scala.xml.{NodeSeq,Text,Node}
 
 class Comment extends LongKeyedMapper[Comment] with IdPK {
 	def getSingleton = Comment
@@ -29,10 +29,10 @@ class Comment extends LongKeyedMapper[Comment] with IdPK {
 		notNull _ :: Nil
 	  }
 	  
-	  def short = {
+	  def short:Node = {
 	    this.get.length match {
-	      case l if l > 50 => this.get.substring(50) + "..."
-	      case _ => this.get
+	      case l if l > 50 => Text(this.get.substring(50) + "...")
+	      case _ => Text(this.get)
 	    }
 	  }
 	}
