@@ -48,9 +48,9 @@ trait MapperBinder {
         Unparsed(nodeStr)
       }
 
-      def getFieldForMatchFromData(m:String):String = {
+      def getFieldForMatchFromData(matchStr:String):String = {
         //Remove @ sign
-        val fieldName = m.replaceAllLiterally("@","")
+        val fieldName = matchStr.replaceAllLiterally("@","")
 
         val field =  data.fieldByName(fieldName)
         field match {
@@ -59,15 +59,44 @@ trait MapperBinder {
             .asHtml
             .toString
             .replaceAllLiterally("@","&#64;")
-          case _ => invokeShowFunc(m)
+          case _ => invokeShowFunc(matchStr)
         }
       }
 
       //tried to invoke field.method function that return a Node, otherwise, return
       def invokeShowFunc(matchStr:String) = {
+        val fieldNameMethod = matchStr.replaceAllLiterally("@","").split('.')
+        fieldNameMethod.length match {
+          case l if (l==2) => {
+            val field = data.fieldByName(fieldNameMethod(0))
+            field match {
+              case Full(f) => {
+                invokeFuncOfField(f, fieldNameMethod(1) , matchStr).toString
+              }
+              case _ => matchStr
+            }
+          }
+          case _ => matchStr
+        }
+      }
 
+      def invokeFuncOfField[A](field:MappedField[A,T], method:String , matchStr:String):Node = {
+        //If the method is validate method the has no argument and return a Node, invoke it
+        val clazz = field.getClass
+        val methods = clazz.getMethods()
+        val validateMethods = methods.filter { m =>
+          m.getName==method &&
+            m.getParameterTypes().length==0 &&
+            m.getReturnType == classOf[Node]
+        }
+
+        if(validateMethods.length  > 0)
+          validateMethods.head.invoke(field).asInstanceOf[Node]
+        else
+          Unparsed(matchStr)     //Return original string if method is not found
       }
     }
+
 
     def tranformInput(in:NodeSeq):NodeSeq =  {
       val classAttrs = (in \\ "@class").filter(n=>n.text.contains("mb:")).map(n=>n.text)
