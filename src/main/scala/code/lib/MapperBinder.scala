@@ -50,7 +50,7 @@ trait MapperBinder {
 
       def getFieldForMatchFromData(m:String):String = {
         //Remove @ sign
-        val fieldName = m.replaceAllLiterally("@","").toLowerCase
+        val fieldName = m.replaceAllLiterally("@","")
 
         val field =  data.fieldByName(fieldName)
         field match {
