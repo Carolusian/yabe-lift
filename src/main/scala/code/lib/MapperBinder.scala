@@ -1,14 +1,11 @@
 package code.lib
 
 import net.liftweb.mapper._
-import net.liftweb.http._
 import net.liftweb.common._
 import net.liftweb.util._
 import Helpers._
-import code.model.Post
 import xml.transform.{RuleTransformer, RewriteRule}
 import xml._
-import reflect.If
 
 trait MapperBinder {
   def bindMapper[T<:Mapper[T]](data: Mapper[T])(in:NodeSeq):NodeSeq = {
