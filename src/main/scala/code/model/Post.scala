@@ -4,8 +4,9 @@ import net.liftweb.mapper._
 import net.liftweb.http._
 import net.liftweb.common._
 import net.liftweb.util._
-import scala.Predef._
 import code.comet.CommentsServer
+import code.lib.YabeHelper
+import xml.{Unparsed, Text, Node}
 
 class Post extends LongKeyedMapper[Post] with IdPK {
   def getSingleton = Post
@@ -29,6 +30,14 @@ class Post extends LongKeyedMapper[Post] with IdPK {
     def getAuthor = {
       User.find(By(User.id, author.get)).openTheBox
     }
+
+    def first:Node = {
+      Text(getAuthor.firstName.get)
+    }
+
+    def last:Node = {
+      Text(getAuthor.lastName.get)
+    }
   }
 
   object title extends MappedString(this, 140) {
@@ -37,7 +46,7 @@ class Post extends LongKeyedMapper[Post] with IdPK {
     }
   }
 
-  object content extends MappedText(this) {
+  object content extends MappedTextarea(this, 1000) {
     override def validations = {
       def notNull(txt: String) = {
         if (txt == "")
@@ -47,6 +56,10 @@ class Post extends LongKeyedMapper[Post] with IdPK {
       }
 
       notNull _ :: Nil
+    }
+
+    override def asHtml:Node = {
+      Unparsed(super.asHtml.toString.replace("\n","<br />"))
     }
   }
 
@@ -62,13 +75,15 @@ class Post extends LongKeyedMapper[Post] with IdPK {
       isDate _ :: Nil
     }
 
+    override def format(d: java.util.Date): String = YabeHelper.fmtDateStr(d)
+
     override def parse(s: String): Box[java.util.Date] = {
       val df = new java.text.SimpleDateFormat("yyyy-MM-dd")
       try {
         val date = df.parse(s)
         Full(date)
       } catch {
-        case _ => Empty
+        case _ => Full(this.set(null))
       }
     }
   }

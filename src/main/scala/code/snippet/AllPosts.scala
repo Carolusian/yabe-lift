@@ -8,6 +8,7 @@ import Helpers._
 import code.model._
 import code.lib._
 import net.liftweb.mapper.By._
+import code.lib.MapperBinder._
 
 class AllPosts {
 
@@ -118,10 +119,8 @@ class AllPostsAdd extends StatefulSnippet {
       }
     }
 
-    "name=title" #> SHtml.text(post.title, post.title.set(_)) &
-      "name=content" #> SHtml.textarea(post.content, post.content.set(_)) &
-      "name=postedAt" #> SHtml.text(YabeHelper.fmtDateStr(post.postedAt), post.postedAt.setFromAny(_)) &
-      "name=author_id" #> post.author.toForm &
+
+    "#post-display" #> bindMapper(post) _ &
       renderTags(PostTag.findAll(By(PostTag.post, post.id)).map(_.tag.get)) &
       "type=submit" #> SHtml.onSubmitUnit(() => process)
   }
@@ -148,10 +147,7 @@ class AllPostsEdit extends StatefulSnippet {
       }
     }
 
-    "name=title" #> SHtml.text(post.title, post.title.set(_)) &
-      "name=content" #> SHtml.textarea(post.content, post.content.set(_)) &
-      "name=postedAt" #> SHtml.text(YabeHelper.fmtDateStr(post.postedAt), post.postedAt.setFromAny(_)) &
-      "name=author_id" #> post.author.toForm &
+    "#post-display" #> bindMapper(post) _ &
       renderTags(PostTag.findAll(By(PostTag.post, post.id)).map(_.tag.get)) &
       "type=submit" #> SHtml.onSubmitUnit(() => process)
   }

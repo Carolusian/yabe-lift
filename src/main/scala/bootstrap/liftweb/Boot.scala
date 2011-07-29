@@ -49,6 +49,7 @@ class Boot {
       Menu.i("Home") / "index", //>> User.AddUserMenusAfter,
       Menu.i("Read") / "read",
       Menu.i("Posts by tag") / "posts",
+      Menu.i("Test") / "test" ,
       //Can be accessed by both users and admins
       Menu.i("My posts") / "admin" / "posts" / ** >> IfUserLoggedIn >> LocGroup("admin"),
 

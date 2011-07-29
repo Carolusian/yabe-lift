@@ -14,26 +14,24 @@
 
 	<div class="lift:Posts.read post">
 		<h2 class="post-title">
-			<a href="/posts/1" class="post-title-link">About the model layer</a>
+			<a href="/read/@id" class="post-title-link">@title</a>
 		</h2>
 		<div class="post-metadata">
-			<span class="post-author">by Bob</span>, <span class="post-date">14
-				Jun 09</span> <span class="post-tags">
-            <span class="post-tags">- Tagged
-                <a href="/posts/Play">Play</a>,
-                <a href="/posts/Architecture">Architecture</a></span>
+			<span class="post-author">by @author.first @author.last</span>,
+            <span class="post-date">
+                @postedAt
+            </span>
+            <span class="post-tags">
+                <span class="post-tags">- Tagged
+                    <a href="/posts/Play">Play</a>,
+                    <a href="/posts/Architecture">Architecture</a>
+                </span>
 			</span>
 		</div>
 		<div class="post-content">
 			<div class="about">Detail:</div>
-			<span class="post-content-span">The model has a central position in a Play! application. It is the
-			domain-specific representation of the information on which the
-			application operates.<br /> <br />Martin fowler defines it as :<br />
-			<br />Responsible for representing concepts of the business,
-			information about the business situation, and business rules. State
-			that reflects the business situation is controlled and used here,
-			even though the technical details of storing it are delegated to the
-			infrastructure. This layer is the heart of business software.<br />
+			<span class="post-content-span">
+                @content
 			</span>
 		</div>
 	</div>

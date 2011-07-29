@@ -12,6 +12,7 @@ import java.util.Date
 import Helpers._
 import code.model._
 import code.lib._
+import MapperBinder._
 import code.comet._
 
 class Comments {
@@ -65,17 +66,12 @@ class Comments {
   def list: CssSel = {
     val comments = getComments()
     var odd = "even"
+
     "tr" #> comments.map {
       c =>
-        odd = YabeHelper.oddOrEven(odd);
-        "tr [class]" #> odd &
-          "a [href]" #> ("/admin/comments/edit/" + c.id) &
-          "a *" #> c.content.short &
-          ".post-title" #> (c.post.getTitle) &
-          ".comment-author" #> (c.author.get match {
-            case "" => "guest"
-            case _ => c.author.get
-          })
+        odd = YabeHelper.oddOrEven(odd)
+        ".comment_item" #> bindMapper(c, {"tr [class]" #> odd}) _
+
     }
   }
 
@@ -92,21 +88,21 @@ class Comments {
   def sort = {
     val search = searchStr.is
 
-    if(getCommentsOrder == "DESC")
+    if (getCommentsOrder == "DESC")
       "a [class]" #> "crudSortedDesc" &
-      "a" #> SHtml.link("/admin/comments/index?order=ASC",
-          ()=>searchStr(search),
+        "a" #> SHtml.link("/admin/comments/index?order=ASC",
+          () => searchStr(search),
           <span>Contents</span>,
-          "class"->"crudSortedDesc")
+          "class" -> "crudSortedDesc")
     else
       "a [class]" #> "crudSortedAsc" &
-      "a" #> SHtml.link("/admin/comments/index?order=DESC",
-          ()=>searchStr(search),
+        "a" #> SHtml.link("/admin/comments/index?order=DESC",
+          () => searchStr(search),
           <span>Content</span>,
-          "class"->"crudSortedAsc")
+          "class" -> "crudSortedAsc")
   }
 
-  def search:CssSel = {
+  def search: CssSel = {
     "name=search" #> SHtml.textElem(searchStr)
   }
 
@@ -115,9 +111,9 @@ class Comments {
   }
 
   private def countComments() = {
-    if(validSearch()) {
-      Comment.count(BySql(" content like '%"+searchStr.is+"%' ",
-              IHaveValidatedThisSQL("charliechen","2011-07-21")))
+    if (validSearch()) {
+      Comment.count(BySql(" content like '%" + searchStr.is + "%' ",
+        IHaveValidatedThisSQL("charliechen", "2011-07-21")))
     } else
       Comment.count()
   }
@@ -152,7 +148,9 @@ class CommentsEdit extends StatefulSnippet {
   private val id = S.param("id").openTheBox
   private val comment = Comment.find(By(Comment.id, id.toLong)).openTheBox
 
-  def dispatch = {case "render" => render}
+  def dispatch = {
+    case "render" => render
+  }
 
   def render = {
 
@@ -166,10 +164,10 @@ class CommentsEdit extends StatefulSnippet {
       }
     }
 
-    "name=author" #> SHtml.text(comment.author, comment.author.set(_)) &
-      "name=content" #> SHtml.textarea(comment.content, comment.content.set(_)) &
-      "name=postedAt" #> SHtml.text(YabeHelper.fmtDateStr(comment.postedAt), comment.postedAt.setFromAny(_)) &
-      "name=post_id" #> comment.post.toForm &
-      "type=submit" #> SHtml.onSubmitUnit(() => process)
+    "*" #>
+      bindMapper(comment, {
+        "type=submit" #> SHtml.onSubmitUnit(() => process)
+      }) _
+
   }
 }

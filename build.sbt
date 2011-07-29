@@ -1,6 +1,6 @@
 name := "yabe-lift"
 
-scalaVersion := "2.9.0"
+scalaVersion := "2.8.1"
 
 seq(webSettings :_*)
 
@@ -8,11 +8,12 @@ jettyScanDirs := Nil
 
 unmanagedBase <<= baseDirectory { base => base / "custom_lib" }
 
+scalacOptions += "-deprecation"
+
 libraryDependencies ++= Seq(
   "net.liftweb" %% "lift-webkit" % "2.4-M1" % "compile->default",
   "net.liftweb" %% "lift-mapper" % "2.4-M1" % "compile->default",
   "net.liftweb" %% "lift-wizard" % "2.4-M1" % "compile->default")
-
 
 libraryDependencies ++= Seq(
   "junit" % "junit" % "4.5" % "test->default",

@@ -11,6 +11,7 @@ import java.awt.GradientPaint
 import java.awt.RenderingHints
 import java.io._
 import javax.imageio.ImageIO
+import scala.math._
 
 object YabeHelper {
   /**
@@ -70,7 +71,7 @@ object YabeHelper {
     g2d.setColor(new Color(255, 153, 0))
 
     val r = new Random()
-    val index = Math.abs(r.nextInt()) % 5
+    val index = abs(r.nextInt()) % 5
 
     val captcha = String.copyValueOf(data(index))
     S.setSessionAttribute("captcha", captcha )
@@ -79,8 +80,8 @@ object YabeHelper {
     var y = 0
 
     for (i <- 0 until data(index).length) {
-        x += 10 + (Math.abs(r.nextInt()) % 15)
-        y = 20 + Math.abs(r.nextInt()) % 20
+        x += 10 + (abs(r.nextInt()) % 15)
+        y = 20 + abs(r.nextInt()) % 20
         g2d.drawChars(data(index), i, 1, x, y)
     }
 
