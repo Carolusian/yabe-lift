@@ -41,7 +41,7 @@ trait MapperBinder {
         var nodeStr = n.toString
         matches.foreach { m =>
           val fieldData = getFieldForMatchFromData(m)
-          nodeStr = nodeStr.replaceAllLiterally(m, fieldData )
+          nodeStr = nodeStr.replace(m, fieldData )
         }
 
         //Because asHtml is already safe, so asHtml.toString is also safe. Just use Unparsed to avoid parsing & to &amp;
@@ -50,7 +50,7 @@ trait MapperBinder {
 
       def getFieldForMatchFromData(matchStr:String):String = {
         //Remove @ sign
-        val fieldName = matchStr.replaceAllLiterally("@","")
+        val fieldName = matchStr.replace("@","")
 
         val field =  data.fieldByName(fieldName)
         field match {
@@ -58,14 +58,14 @@ trait MapperBinder {
           case Full(f) => f.asInstanceOf[MappedField[_,T]]
             .asHtml
             .toString
-            .replaceAllLiterally("@","&#64;")
+            .replace("@","&#64;")
           case _ => invokeShowFunc(matchStr)
         }
       }
 
       //tried to invoke field.method function that return a Node, otherwise, return
       def invokeShowFunc(matchStr:String) = {
-        val fieldNameMethod = matchStr.replaceAllLiterally("@","").split('.')
+        val fieldNameMethod = matchStr.replace("@","").split('.')
         fieldNameMethod.length match {
           case l if (l==2) => {
             val field = data.fieldByName(fieldNameMethod(0))
@@ -110,7 +110,7 @@ trait MapperBinder {
     }
 
     def isFieldValidate(classAttr:String):Boolean = {
-      val fieldName = classAttr.replaceAllLiterally("mb:","")
+      val fieldName = classAttr.replace("mb:","")
       val field = data.fieldByName(fieldName)
       field match {
         case Full(f) => {true}
@@ -119,7 +119,7 @@ trait MapperBinder {
     }
 
     def bindInputField(classAttr:String):CssSel = {
-      val fieldName = classAttr.replaceAllLiterally("mb:","")
+      val fieldName = classAttr.replace("mb:","")
       val field = data.fieldByName(fieldName).openTheBox
       //use dot to indicate that it is a class attribute
       ("."+classAttr) #> field.toForm
