@@ -3,91 +3,97 @@ package code.model
 import net.liftweb.common._
 import net.liftweb.mapper._
 import net.liftweb.util._
-import scala.xml.{NodeSeq,Text,Node}
+import scala.xml.{NodeSeq, Text, Node}
+import code.lib.YabeHelper
 
 class Comment extends LongKeyedMapper[Comment] with IdPK {
-	def getSingleton = Comment
+  def getSingleton = Comment
 
-	object author extends MappedString(this,140) {
-    override def asHtml ={
+  object author extends MappedString(this, 140) {
+    override def asHtml = {
       this.get match {
         case "" => Text("guest")
         case _ => Text(this.get)
       }
     }
   }
-	
-	object content extends MappedText(this) {
-	  override def validations = {
-		def notNull(txt:String ) = {
-		  if(txt=="")
-		    List(FieldError(this,"Please input content."))
-		  else
-		    List[FieldError]()
-		}
-	    
-		notNull _ :: Nil
-	  }
-	  
-	  def short:Node = {
-	    this.get.length match {
-	      case l if l > 50 => Text(this.get.substring(50) + "...")
-	      case _ => Text(this.get)
-	    }
-	  }
-	}
-	
-	object postedAt extends MappedDateTime(this) {
+
+  object content extends MappedTextarea(this, 1000) {
     override def validations = {
-	    def isDate(txt:java.util.Date) = {
-	      if(txt==null)
-	        List(FieldError(this,"Please input a validate date."))
-	      else
-	        List[FieldError]()
-	    }
+      def notNull(txt: String) = {
+        if (txt == "")
+          List(FieldError(this, "Please input content."))
+        else
+          List[FieldError]()
+      }
 
-	    isDate _ :: Nil
-	  }
+      notNull _ :: Nil
+    }
 
-    override def parse(s:String):Box[java.util.Date] = {
-	    val df = new java.text.SimpleDateFormat("yyyy-MM-dd")
-	    try {
-	      val date = df.parse(s)
-	      Full(date)
-	    } catch {
-	      case _ => Empty
-	    }
-	  }
+    def short: Node = {
+      this.get.length match {
+        case l if l > 50 => Text(this.get.substring(50) + "...")
+        case _ => Text(this.get)
+      }
+    }
   }
-	
-	object post extends MappedLongForeignKey(this,Post) {
+
+  object postedAt extends MappedDateTime(this) {
+    override def validations = {
+      def isDate(txt: java.util.Date) = {
+        if (txt == null)
+          List(FieldError(this, "Please input a validate date."))
+        else
+          List[FieldError]()
+      }
+
+      isDate _ :: Nil
+    }
+
+    override def format(d: java.util.Date): String = YabeHelper.fmtDateStr(d)
+
+    override def parse(s: String): Box[java.util.Date] = {
+      val df = new java.text.SimpleDateFormat("yyyy-MM-dd")
+      try {
+        val date = df.parse(s)
+        Full(date)
+      } catch {
+        case _ => {
+          Full(this.set(null))
+        }
+      }
+    }
+  }
+
+  object post extends MappedLongForeignKey(this, Post) {
 
     override def validSelectValues = {
-	    val posts = Post.findAll().map(x=>(x.id.get,x.title.get))
-	    val list = (0.toLong,"(Please select a post)")::posts
-	    Full(list)
-	  }
+      val posts = Post.findAll().map(x => (x.id.get, x.title.get))
+      val list = (0.toLong, "(Please select a post)") :: posts
+      Full(list)
+    }
 
-	  override def validations = {
-	    def validatePost(id:Long) =  {
-	      val posts = Post.findAll(By(Post.id, id))
-	      posts match {
-	        case Nil => List(FieldError(this,"Please add comments to valid posts."))
-	        case _ => List[FieldError]()
-	      }
-	    }
-	    
-	    validatePost _ :: Nil
-	  }
+    override def validations = {
+      def validatePost(id: Long) = {
+        val posts = Post.findAll(By(Post.id, id))
+        posts match {
+          case Nil => List(FieldError(this, "Please add comments to valid posts."))
+          case _ => List[FieldError]()
+        }
+      }
+
+      validatePost _ :: Nil
+    }
 
     override def asHtml = {
-	    val post = Post.find(By(Post.id,this.get))
-	    post match {
-	      case Full(p) => Text(p.title.get)
-	      case _ => Text("")
-	    }
+      val post = Post.find(By(Post.id, this.get))
+      post match {
+        case Full(p) => Text(p.title.get)
+        case _ => Text("")
+      }
     }
-	}
+  }
+
 }
 
-object Comment extends Comment with LongKeyedMetaMapper[Comment] with CRUDify[Long,Comment]
+object Comment extends Comment with LongKeyedMetaMapper[Comment] with CRUDify[Long, Comment]

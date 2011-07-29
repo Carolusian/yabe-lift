@@ -22,11 +22,8 @@ class Users {
     "#users" #> users.map {
       u =>
         odd = YabeHelper.oddOrEven(odd);
-        ".user_item" #> {
-          bindMapper(u, {
-            "tr [class]" #> odd
-          }) _
-        }
+        ".user_item" #> bindMapper(u, {"tr [class]" #> odd}) _
+
 
     }
   }
@@ -126,11 +123,10 @@ class UsersAdd extends StatefulSnippet {
       }
     }
 
-    "*" #> {
+    "*" #>
       bindMapper(user, {
         "type=submit" #> SHtml.onSubmitUnit(process)
       }) _
-    }
   }
 }
 
@@ -158,10 +154,9 @@ class UsersEdit extends StatefulSnippet {
       }
     }
 
-    "*" #> {
+    "*" #>
       bindMapper(user, {
         "type=submit" #> SHtml.onSubmitUnit(process)
       }) _
-    }
   }
 }

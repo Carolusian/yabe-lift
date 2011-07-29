@@ -69,12 +69,9 @@ class Comments {
 
     "tr" #> comments.map {
       c =>
-        odd = YabeHelper.oddOrEven(odd);
-        ".comment_item" #> {
-          bindMapper(c,{
-            "tr [class]" #> odd
-          }) _
-        }
+        odd = YabeHelper.oddOrEven(odd)
+        ".comment_item" #> bindMapper(c, {"tr [class]" #> odd}) _
+
     }
   }
 
@@ -91,21 +88,21 @@ class Comments {
   def sort = {
     val search = searchStr.is
 
-    if(getCommentsOrder == "DESC")
+    if (getCommentsOrder == "DESC")
       "a [class]" #> "crudSortedDesc" &
-      "a" #> SHtml.link("/admin/comments/index?order=ASC",
-          ()=>searchStr(search),
+        "a" #> SHtml.link("/admin/comments/index?order=ASC",
+          () => searchStr(search),
           <span>Contents</span>,
-          "class"->"crudSortedDesc")
+          "class" -> "crudSortedDesc")
     else
       "a [class]" #> "crudSortedAsc" &
-      "a" #> SHtml.link("/admin/comments/index?order=DESC",
-          ()=>searchStr(search),
+        "a" #> SHtml.link("/admin/comments/index?order=DESC",
+          () => searchStr(search),
           <span>Content</span>,
-          "class"->"crudSortedAsc")
+          "class" -> "crudSortedAsc")
   }
 
-  def search:CssSel = {
+  def search: CssSel = {
     "name=search" #> SHtml.textElem(searchStr)
   }
 
@@ -114,9 +111,9 @@ class Comments {
   }
 
   private def countComments() = {
-    if(validSearch()) {
-      Comment.count(BySql(" content like '%"+searchStr.is+"%' ",
-              IHaveValidatedThisSQL("charliechen","2011-07-21")))
+    if (validSearch()) {
+      Comment.count(BySql(" content like '%" + searchStr.is + "%' ",
+        IHaveValidatedThisSQL("charliechen", "2011-07-21")))
     } else
       Comment.count()
   }
@@ -151,7 +148,9 @@ class CommentsEdit extends StatefulSnippet {
   private val id = S.param("id").openTheBox
   private val comment = Comment.find(By(Comment.id, id.toLong)).openTheBox
 
-  def dispatch = {case "render" => render}
+  def dispatch = {
+    case "render" => render
+  }
 
   def render = {
 
@@ -165,15 +164,10 @@ class CommentsEdit extends StatefulSnippet {
       }
     }
 
-    "*" #> {
+    "*" #>
       bindMapper(comment, {
         "type=submit" #> SHtml.onSubmitUnit(() => process)
       }) _
-    }
-    /*"name=author" #> SHtml.text(comment.author, comment.author.set(_)) &
-      "name=content" #> SHtml.textarea(comment.content, comment.content.set(_)) &
-      "name=postedAt" #> SHtml.text(YabeHelper.fmtDateStr(comment.postedAt), comment.postedAt.setFromAny(_)) &
-      "name=post_id" #> comment.post.toForm &
-      "type=submit" #> SHtml.onSubmitUnit(() => process)*/
+
   }
 }

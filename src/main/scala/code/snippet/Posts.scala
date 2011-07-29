@@ -18,13 +18,9 @@ class Posts {
 
     latestPost match {
       case Full(p) => {
-        ".post-title-link [href]" #> ("/read/" + p.id) &
-          ".post-title-link *" #> p.title.get &
-          ".post-author *" #> ("by " + p.author.getAuthor.firstName + " " +
-            p.author.getAuthor.lastName) &
-          ".post-date *" #> YabeHelper.fmtDateStr(p.postedAt.get) &
-          ".post-comments *" #> (" | " + p.countComments + " comments " + p.latestCommentAuthor) &
-          "#post-content-span" #> Unparsed(p.content.is.replaceAll("\n", "<br />"))
+        "*" #> bindMapper(p,{
+          ".post-comments *" #> (" | " + p.countComments + " comments " + p.latestCommentAuthor)
+        }) _
       }
       case _ => "*" #> <span></span>
     }
@@ -61,12 +57,9 @@ class Posts {
   private def renderPostsList(posts:List[Post]):CssSel = {
    "*" #> posts.map {
     p =>
-      ".post-title-link [href]" #> ("/read/" + p.id) &
-        ".post-title-link *" #> p.title.get &
-        ".post-author *" #> ("by " + p.author.getAuthor.firstName + " " +
-          p.author.getAuthor.lastName) &
-        ".post-date *" #> YabeHelper.fmtDateStr(p.postedAt.get) &
+      "*" #> bindMapper(p,{
         ".post-comments *" #> (" | " + p.countComments + " comments " + p.latestCommentAuthor)
+      }) _
     }
   }
 
@@ -83,13 +76,7 @@ class Posts {
 
     post match {
       case Full(p) => {
-        ".post-title-link [href]" #> ("/read/" + p.id) &
-          ".post-title-link *" #> p.title.get &
-          ".post-author *" #> ("by " + p.author.getAuthor.firstName + " " +
-            p.author.getAuthor.lastName) &
-          ".post-date *" #> YabeHelper.fmtDateStr(p.postedAt.get) &
-          ".post-tags *" #> Unparsed(p.showTagMetaStr) &
-          ".post-content-span" #> Unparsed(p.content.is.replaceAll("\n", "<br />"))
+        "*" #> bindMapper(p, {".post-tags *" #> Unparsed(p.showTagMetaStr) }) _
       }
       case _ => "*" #> ""
     }
@@ -164,8 +151,7 @@ class Posts {
       }
     }
 
-    "name=title" #> SHtml.onSubmit(post.title.set(_)) &
-      "name=content" #> SHtml.onSubmit(post.content.set(_)) &
+    "#post-add" #> bindMapper(post) _ &
       "type=submit" #> SHtml.onSubmitUnit(() => process)
   }
 
@@ -186,8 +172,7 @@ class Posts {
     if (post.author.toLong != User.currentUserId.openTheBox.toLong) {
       "*" #> <span>Sorry, you do not have permission to edit this post in this page.</span>
     } else {
-      "name=title" #> SHtml.text(post.title, post.title.set(_)) &
-        "name=content" #> SHtml.textarea(post.content, post.content.set(_)) &
+      "#post-edit" #> bindMapper(post) _ &
         "name=tags" #> SHtml.text(post.tags.concat, post.tags.setMultiple(post, _)) &
         "type=submit" #> SHtml.onSubmitUnit(process)
     }
