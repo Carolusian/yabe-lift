@@ -13,7 +13,8 @@ scalacOptions += "-deprecation"
 libraryDependencies ++= Seq(
   "net.liftweb" %% "lift-webkit" % "2.4-M1" % "compile->default",
   "net.liftweb" %% "lift-mapper" % "2.4-M1" % "compile->default",
-  "net.liftweb" %% "lift-wizard" % "2.4-M1" % "compile->default")
+  "net.liftweb" %% "lift-wizard" % "2.4-M1" % "compile->default",
+  "net.liftweb" %% "lift-textile" % "2.4-M1" % "compile->default")
 
 libraryDependencies ++= Seq(
   "junit" % "junit" % "4.5" % "test->default",

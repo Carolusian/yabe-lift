@@ -4,6 +4,7 @@ import net.liftweb.mapper._
 import net.liftweb.http._
 import net.liftweb.common._
 import net.liftweb.util._
+import net.liftweb.textile._
 import code.comet.CommentsServer
 import code.lib.YabeHelper
 import xml.{Unparsed, Text, Node}
@@ -59,7 +60,7 @@ class Post extends LongKeyedMapper[Post] with IdPK {
     }
 
     override def asHtml:Node = {
-      Unparsed(super.asHtml.toString.replace("\n","<br />"))
+      Unparsed(TextileParser.toHtml(this.get.toString).toString)
     }
   }
 
