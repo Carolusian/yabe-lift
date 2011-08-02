@@ -1,0 +1,1 @@
+liftweb-2.4-M1 basic skeleton with sbt 0.10.1 and intellij plugin
