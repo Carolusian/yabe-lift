@@ -127,7 +127,7 @@ trait MapperBinder {
     def bindInputField(classAttr:String):CssSel = {
       val fieldName = classAttr.replace("mb:","")
       val field = data.fieldByName(fieldName).openTheBox
-      //use dot to indicate that it is a class attribute , and remove mb:xxx from class attribute
+      //use dot to indicate that it is a class attribute
       ("."+classAttr) #> field.toForm
     }
 
