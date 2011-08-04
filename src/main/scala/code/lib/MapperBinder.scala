@@ -99,14 +99,20 @@ trait MapperBinder {
 
 
     def tranformInput(in:NodeSeq):NodeSeq =  {
-      val classAttrs = (in \\ "@class").filter(n=>n.text.contains("mb:")).map(n=>n.text)
+      val r = """mb\:[a-zA-Z0-9\_]+""".r
+      val classAttrs = (in \\ "@class").filter(n=>r.findFirstIn(n.text).getOrElse("")!="")
+        .map(n=>r.findFirstIn(n.text).getOrElse(""))
+
       val validateAttrs = classAttrs.filter(isFieldValidate _)
       val cssSelectors = validateAttrs.map(bindInputField(_))
 
-      if(cssSelectors.length > 0)
-        cssSelectors.reduceLeft(_ & _)(in)
-      else
-        in
+      cssSelectors.length match {
+        case l if l > 0 =>  {
+          val removeBindAttr = validateAttrs.map(removeInputBindAttr(_))
+          removeBindAttr.reduceLeft(_ & _)(cssSelectors.reduceLeft(_ & _)(in))
+        }
+        case _ => in
+      }
     }
 
     def isFieldValidate(classAttr:String):Boolean = {
@@ -121,8 +127,18 @@ trait MapperBinder {
     def bindInputField(classAttr:String):CssSel = {
       val fieldName = classAttr.replace("mb:","")
       val field = data.fieldByName(fieldName).openTheBox
-      //use dot to indicate that it is a class attribute
+      //use dot to indicate that it is a class attribute , and remove mb:xxx from class attribute
       ("."+classAttr) #> field.toForm
+    }
+
+    //remove  mb:xxx from class attribute
+    def removeInputBindAttr(classAttr:String):CssSel = {
+      ("."+classAttr+" [class]") #> {
+        (in \\ "@class").filter(n=>n.text.contains(classAttr))
+          .head
+          .text
+          .replace(classAttr,"").trim
+      }
     }
 
     otherBinding(tranformInput(new RuleTransformer(tranformShow).transform(in)))
