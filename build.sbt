@@ -4,7 +4,7 @@ scalaVersion := "2.8.1"
 
 seq(webSettings :_*)
 
-//jettyScanDirs := Nil 
+jettyScanDirs := Nil
 
 libraryDependencies ++= Seq(
   "net.liftweb" %% "lift-webkit" % "2.4-M1" % "compile->default",

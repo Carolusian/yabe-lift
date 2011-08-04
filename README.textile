@@ -1,1 +1,1 @@
-yabe liftweb-tutorial series day 3 source code
+yabe liftweb-tutorial series day 4 source code
