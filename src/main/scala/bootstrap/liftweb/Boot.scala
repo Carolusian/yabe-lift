@@ -34,7 +34,7 @@ class Boot {
     // Use Lift's Mapper ORM to populate the database
     // you don't need to use Mapper to use Lift... use
     // any ORM you want
-    Schemifier.schemify(true, Schemifier.infoF _, User , Post)
+    Schemifier.schemify(true, Schemifier.infoF _, User , Post, Comment, Tag , PostTag)
 
     // where to search snippet
     LiftRules.addToPackages("code")
@@ -46,7 +46,7 @@ class Boot {
       // /static path to be visible
       Menu(Loc("Static", Link(List("static"), true, "/static/index"),
 	       "Static Content"))
-    ) ::: Post.menus
+    ) ::: Post.menus ::: Comment.menus ::: PostTag.menus ::: Tag.menus
     // Build SiteMap
     def sitemap = SiteMap(
       menus:_*
