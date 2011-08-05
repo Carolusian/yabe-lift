@@ -8,6 +8,13 @@ import xml.transform.{RuleTransformer, RewriteRule}
 import xml._
 
 trait MapperBinder {
+  val showSymbol = "@"
+  val showSymbolReplacement = "&#64;"
+  val showRegex = ("""\@[a-zA-Z0-9\_]+(\.[a-zA-Z0-9\_]+){0,1}""").r
+
+  val inputSymbol = "mb:"
+  val inputRegex = ("""mb\:[a-zA-Z0-9\_]+""").r
+
   def bindMapper[T<:Mapper[T]](data: Mapper[T])(in:NodeSeq):NodeSeq = {
     bindMapper(data, "SomeThingThatShouldBeImpossibleToBeUsed" #> "")(in)
   }
@@ -26,7 +33,7 @@ trait MapperBinder {
       }
 
       def replace(ns:NodeSeq):NodeSeq = {
-        val r = """\@[a-zA-Z0-9\_]+(\.[a-zA-Z0-9\_]+){0,1}""".r
+        val r  = showRegex
         ns flatMap { n =>
           val matches = r.findAllIn(n.toString).toList
           if(matches.length > 0) {
@@ -50,7 +57,7 @@ trait MapperBinder {
 
       def getFieldForMatchFromData(matchStr:String):String = {
         //Remove @ sign
-        val fieldName = matchStr.replace("@","")
+        val fieldName = matchStr.replace(showSymbol,"")
 
         val field =  data.fieldByName(fieldName)
         field match {
@@ -58,14 +65,14 @@ trait MapperBinder {
           case Full(f) => f.asInstanceOf[MappedField[_,T]]
             .asHtml
             .toString
-            .replace("@","&#64;")
+            .replace(showSymbol,showSymbolReplacement)
           case _ => invokeShowFunc(matchStr)
         }
       }
 
       //tried to invoke field.method function that return a Node, otherwise, return
       def invokeShowFunc(matchStr:String) = {
-        val fieldNameMethod = matchStr.replace("@","").split('.')
+        val fieldNameMethod = matchStr.replace(showSymbol,"").split('.')
         fieldNameMethod.length match {
           case l if (l==2) => {
             val field = data.fieldByName(fieldNameMethod(0))
@@ -99,7 +106,7 @@ trait MapperBinder {
 
 
     def tranformInput(in:NodeSeq):NodeSeq =  {
-      val r = """mb\:[a-zA-Z0-9\_]+""".r
+      val r = inputRegex
       val classAttrs = (in \\ "@class").filter(n=>r.findFirstIn(n.text).getOrElse("")!="")
         .map(n=>r.findFirstIn(n.text).getOrElse(""))
 
@@ -116,7 +123,7 @@ trait MapperBinder {
     }
 
     def isFieldValidate(classAttr:String):Boolean = {
-      val fieldName = classAttr.replace("mb:","")
+      val fieldName = classAttr.replace(inputSymbol,"")
       val field = data.fieldByName(fieldName)
       field match {
         case Full(f) => {true}
@@ -125,7 +132,7 @@ trait MapperBinder {
     }
 
     def bindInputField(classAttr:String):CssSel = {
-      val fieldName = classAttr.replace("mb:","")
+      val fieldName = classAttr.replace(inputSymbol,"")
       val field = data.fieldByName(fieldName).openTheBox
       //use dot to indicate that it is a class attribute
       ("."+classAttr) #> field.toForm
@@ -134,13 +141,16 @@ trait MapperBinder {
     //remove  mb:xxx from class attribute
     def removeInputBindAttr(classAttr:String):CssSel = {
       ("."+classAttr+" [class]") #> {
-        (in \\ "@class").filter(n=>n.text.contains(classAttr))
-          .head
-          .text
-          .replace(classAttr,"").trim
+        val foundClassAttr = (in \\ "@class").filter(n=>n.text.contains(classAttr))
+        foundClassAttr length match {
+          case l if l>0 => foundClassAttr.head.text.replace(classAttr,"").trim
+          case _ => ""
+        }
       }
     }
 
+    //transform show fields first, then transform input fields.
+    // this will guarantee that '@fieldName' content in input fields would not be transformed by transformShow
     otherBinding(tranformInput(new RuleTransformer(tranformShow).transform(in)))
   }
 }
