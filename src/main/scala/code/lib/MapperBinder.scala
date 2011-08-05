@@ -15,10 +15,10 @@ trait MapperBinder {
   val inputSymbol = "mb:"
   val inputRegex = ("""mb\:[a-zA-Z0-9\_]+""").r
 
-  def bindMapper[T<:Mapper[T]](data: Mapper[T])(in:NodeSeq):NodeSeq = {
-    bindMapper(data, "SomeThingThatShouldBeImpossibleToBeUsed" #> "")(in)
+  def bindMapper[T<:Mapper[T]](data: Mapper[T], otherBinding:CssSel)(in:NodeSeq):NodeSeq = {
+    otherBinding(bindMapper(data)(in))
   }
-  def bindMapper[T<:Mapper[T]](data: Mapper[T], otherBinding:CssSel)(in: NodeSeq): NodeSeq = {
+  def bindMapper[T<:Mapper[T]](data: Mapper[T])(in: NodeSeq): NodeSeq = {
     val tranformShow = new RewriteRule {
       override def transform(n:Node):NodeSeq = n match {
         //check if text has @fieldName
@@ -151,7 +151,7 @@ trait MapperBinder {
 
     //transform show fields first, then transform input fields.
     // this will guarantee that '@fieldName' content in input fields would not be transformed by transformShow
-    otherBinding(tranformInput(new RuleTransformer(tranformShow).transform(in)))
+    tranformInput(new RuleTransformer(tranformShow).transform(in))
   }
 }
 
