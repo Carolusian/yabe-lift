@@ -1,0 +1,49 @@
+gen-idea no-classifiers no-sbt-classifiers
+prepare-webapp
+compile
+prepare-webapp
+jetty-run
+~prepare-webapp
+reload
+update
+~prepare-webapp
+jetty-run
+~prepare-webapp
+jetty-stop
+jetty-run
+~prepare-webapp
+jetty-stop
+jetty-run
+prepare-webapp
+jetty-stop
+jetty-run
+prepare-webapp
+jetty-stop
+jetty-run
+exit
+jetty-run
+compiel
+compile
+compiel
+compile
+jetty-run
+~prepare-webapp
+exit
+compile
+jetty-run
+~prepare-webapp
+jetty-stop
+jetty-run
+~prepare-webapp
+jetty-stop
+exit
+jetty-run
+~prepare-webapp
+prepare-webapp
+exit
+gen-idea no-classifiers no-sbt-classifiers
+exit
+eclipse create-src
+eclipse create-src same-targets
+exit
+gen-idea no-classifiers no-sbt-classifiers
