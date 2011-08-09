@@ -1,4 +1,4 @@
-name := "yabe-day-4"
+name := "yabe-day-5"
 
 scalaVersion := "2.8.1"
 

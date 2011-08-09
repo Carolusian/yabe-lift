@@ -10,3 +10,7 @@
 /lift_proto.db.lock.db
 /target
 /target
+/project/boot
+/project/target
+/project/plugins/project
+/project/plugins/target
