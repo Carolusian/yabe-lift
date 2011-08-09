@@ -14,3 +14,6 @@
 /project/target
 /project/plugins/project
 /project/plugins/target
+/.classpath
+/.project
+/.settings

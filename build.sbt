@@ -1,6 +1,6 @@
 name := "yabe-day-5"
 
-scalaVersion := "2.8.1"
+scalaVersion := "2.9.0-1"
 
 seq(webSettings :_*)
 

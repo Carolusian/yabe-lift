@@ -57,6 +57,12 @@ class Boot {
     // set the sitemap.  Note if you don't want access control for
     // each page, just comment this line out.
     LiftRules.setSiteMapFunc(() => sitemapMutators(sitemap))
+    
+    //Route
+    LiftRules.statelessRewrite.append {
+      case RewriteRequest(ParsePath("read"::id::Nil,_,_,_),_,_) => 
+        RewriteResponse("read"::Nil, Map("id"->id))
+    } 
 
     // Use jQuery 1.4
     LiftRules.jsArtifacts = net.liftweb.http.js.jquery.JQuery14Artifacts

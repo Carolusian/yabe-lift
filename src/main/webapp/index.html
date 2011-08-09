@@ -1,7 +1,7 @@
 <div class="lift:surround?with=default;at=content">
    <head_merge><title>Home</title></head_merge>
 
-    <div class="post">
+    <div class="post lift:Posts.latestPost">
         <h2 class="post-title">
             <a href="/read/1">post title</a>
         </h2>
@@ -13,26 +13,15 @@
         </div>
         <div class="post-content">
             <div class="about">Detail:</div>
-            <span id="post-content-span"> this is the content of the post.</span>
+            <span class="post-content-span"> this is the content of the post.</span>
         </div>
     </div>
-    <div class="lift:HelloWorld.howdy"><span id="time"></span>aaaa</div>
-    <hr />
+
     <div class="older-posts">
         <h3>
             Older posts <span class="from">from this blog</span>
         </h3>
-        <div class="post teaser">
-            <h2 class="post-title">
-                <a class="post-title-link" href="/read/2">older post title</a>
-            </h2>
-            <div class="post-metadata">
-                <span class="post-author">by Charlie Chen</span>,
-                <span class="post-date">2011-08-02</span>
-                <span class="post-comments"> 2 comments, latest by Charlie</span>
-            </div>
-        </div>
-        <div class="post teaser">
+        <div class="post teaser lift:Posts.listOlder">
             <h2 class="post-title">
                 <a class="post-title-link" href="/read/2">older post title</a>
             </h2>
