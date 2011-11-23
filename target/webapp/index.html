@@ -1,0 +1,52 @@
+<div id="main" class="lift:surround?with=default;at=content">
+    <head_merge>
+        <title>Home</title>
+    </head_merge>
+
+    <div class="lift:Posts.listLatest post">
+        <h2 class="post-title">
+            <a href="/read/@id" class="post-title-link">@title</a>
+        </h2>
+
+        <div class="post-metadata">
+            <span class="post-author">by @author.first @author.last</span>,
+            <span class="post-date">
+				@postedAt
+            </span>
+            <span class="post-comments">
+                &nbsp;|&nbsp; 2 comments,
+				latest by Mike
+            </span>
+        </div>
+        <div class="post-content">
+            <div class="about">Detail:</div>
+			<span id="post-content-span"> @content </span>
+        </div>
+    </div>
+
+
+    <div class="older-posts">
+        <h3>
+            Older posts <span class="from">from this blog</span>
+        </h3>
+
+        <div class="lift:Posts.listOlder post teaser">
+            <h2 class="post-title">
+                <a class="post-title-link" href="/read/@id">@title</a>
+            </h2>
+
+            <div class="post-metadata">
+                <span class="post-author">by @author.first @author.last</span>,
+                <span class="post-date">
+                    @postedAt
+                </span>
+                <span class="post-comments">
+                    &nbsp;|&nbsp; no
+					comments
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+

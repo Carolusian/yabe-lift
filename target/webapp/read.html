@@ -1,0 +1,110 @@
+<div id="main" class="lift:surround?with=default;at=content">
+	<head_merge>
+        <title class="lift:Posts.title"></title>
+    </head_merge>
+
+    <ul id="pagination">
+		<li id="previous" class="lift:Posts.prev">
+			<a href="/posts/3">{prev post}</a>
+		</li>
+        <li id="next" class="lift:Posts.next"> 
+            <a href="/posts/1">{next post}</a>
+        </li>
+	</ul>
+
+	<div class="lift:Posts.read post">
+		<h2 class="post-title">
+			<a href="/read/@id" class="post-title-link">@title</a>
+		</h2>
+		<div class="post-metadata">
+			<span class="post-author">by @author.first @author.last</span>,
+            <span class="post-date">
+                @postedAt
+            </span>
+            <span class="post-tags">
+                <span class="post-tags">- Tagged
+                    <a href="/posts/Play">Play</a>,
+                    <a href="/posts/Architecture">Architecture</a>
+                </span>
+			</span>
+		</div>
+		<div class="post-content">
+			<div class="about">Detail:</div>
+			<span class="post-content-span">
+                @content
+			</span>
+		</div>
+	</div>
+
+	<div class="lift:comet?type=CommentsList comments">
+		<h3 class="comment-count">2 comments</h3>
+
+		<div class="comment">
+			<div class="comment-metadata">
+				<span class="comment-author">by Guest,</span> <span
+					class="comment-date">14 Jun 09</span>
+			</div>
+			<div class="comment-content">
+				<div class="about">Detail:</div>
+				<span class="comment-content-span">You are right !<br /></span>
+			</div>
+		</div>
+	</div>
+	<div class="lift:Comments.initComet"></div>
+
+	<h3>Post a comment</h3>
+
+	<form class="lift:form.ajax">
+		<div class="lift:Comments.add">
+			<span id="error" class="error"></span>
+			<p>
+				<label for="author">Your name: </label> <input type="text"
+					name="author" id="author" value="" />
+			</p>
+			<p>
+				<label for="content">Your message: </label>
+				<textarea name="content" id="content"></textarea>
+			</p>
+			<p>
+				<label for="code">Please type the code below: </label> <img id="captcha"
+					src="/captcha" /> <br /> <input type="text" name="code" id="code"
+					size="18" value="" />
+			</p>
+			<p>
+				<input type="submit" value="Submit your comment" />
+			</p>
+		</div>
+	</form>
+	
+	<script type="text/javascript" charset="utf-8"> 
+	    $(function() {         
+	        // Expose the form 
+	        $('form').click(function() { 
+	            $('form').expose({api: true}).load(); 
+	        }); 
+	        
+	        $("#error").hide();
+	    });
+	    
+	    function clearError() {
+	    	$("#error").html("");
+	    	$("#error").hide();
+	    }
+	    
+	    function showError(msg) {
+	    	$("#error").html(msg);
+	    	$("#error").show();
+	    }
+	    
+	    //use a param to update captcha
+	    var update=0;
+	    
+	    function clearForm() {
+	    	$("#author").val("");
+	    	$("#content").val("");
+	    	$("#code").val("");
+	    	$("#captcha").attr("src","/captcha?update="+update);
+	    	update++;
+	    }
+	</script>
+</div>

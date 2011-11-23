@@ -3,6 +3,8 @@ package code.lib
 import net.liftweb.mapper._
 import net.liftweb.common._
 import net.liftweb.util._
+import net.liftweb.http._
+import js._
 import Helpers._
 import xml.transform.{RuleTransformer, RewriteRule}
 import xml._
@@ -15,6 +17,19 @@ trait MapperBinder {
   val inputSymbol = "mb:"
   val inputRegex = ("""mb\:[a-zA-Z0-9\_]+""").r
 
+  //for ajax only
+  //for form.ajax functions, this will makes ajaxForms function normally
+  def bindMapper[T<:Mapper[T]](data: Mapper[T], 
+      ajaxHandler:()=>JsCmd)(in:NodeSeq):NodeSeq = {
+    bindMapper(data)(in) ++ SHtml.hidden(ajaxHandler)
+  }
+	//for ajax only
+  //for form.ajax functions, this will makes ajaxForms function normally
+  def bindMapper[T<:Mapper[T]](data: Mapper[T], 
+      ajaxHandler:()=>JsCmd, otherBinding:CssSel)(in:NodeSeq):NodeSeq = {
+    otherBinding(bindMapper(data)(in)) ++ SHtml.hidden(ajaxHandler)
+  }
+  
   def bindMapper[T<:Mapper[T]](data: Mapper[T], otherBinding:CssSel)(in:NodeSeq):NodeSeq = {
     otherBinding(bindMapper(data)(in))
   }
@@ -33,7 +48,7 @@ trait MapperBinder {
       }
 
       def replace(ns:NodeSeq):NodeSeq = {
-        val r  = showRegex
+        val r = showRegex
         ns flatMap { n =>
           val matches = r.findAllIn(n.toString).toList
           if(matches.length > 0) {
@@ -59,7 +74,7 @@ trait MapperBinder {
         //Remove @ sign
         val fieldName = matchStr.replace(showSymbol,"")
 
-        val field =  data.fieldByName(fieldName)
+        val field = data.fieldByName(fieldName)
         field match {
           //replace @ to "&#64;", please note that you should also use "&#64;" instead of "@" in the templates
           case Full(f) => f.asInstanceOf[MappedField[_,T]]
@@ -97,15 +112,15 @@ trait MapperBinder {
             m.getReturnType == classOf[Node]
         }
 
-        if(validateMethods.length  > 0)
+        if(validateMethods.length > 0)
           validateMethods.head.invoke(field).asInstanceOf[Node]
         else
-          Unparsed(matchStr)     //Return original string if method is not found
+          Unparsed(matchStr) //Return original string if method is not found
       }
     }
 
 
-    def tranformInput(in:NodeSeq):NodeSeq =  {
+    def tranformInput(in:NodeSeq):NodeSeq = {
       val r = inputRegex
       val classAttrs = (in \\ "@class").filter(n=>r.findFirstIn(n.text).getOrElse("")!="")
         .map(n=>r.findFirstIn(n.text).getOrElse(""))
@@ -114,7 +129,7 @@ trait MapperBinder {
       val cssSelectors = validateAttrs.map(bindInputField(_))
 
       cssSelectors.length match {
-        case l if l > 0 =>  {
+        case l if l > 0 => {
           val removeBindAttr = validateAttrs.map(removeInputBindAttr(_))
           removeBindAttr.reduceLeft(_ & _)(cssSelectors.reduceLeft(_ & _)(in))
         }
@@ -138,7 +153,7 @@ trait MapperBinder {
       ("."+classAttr) #> field.toForm
     }
 
-    //remove  mb:xxx from class attribute
+    //remove mb:xxx from class attribute
     def removeInputBindAttr(classAttr:String):CssSel = {
       ("."+classAttr+" [class]") #> {
         val foundClassAttr = (in \\ "@class").filter(n=>n.text.contains(classAttr))

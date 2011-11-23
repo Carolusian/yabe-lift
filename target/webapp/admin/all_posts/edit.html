@@ -1,0 +1,66 @@
+<div class="lift:surround?with=admin;at=content">
+	<div id="crud">
+		<div id="crudContent">
+			<div id="crudBlank" class="Posts">
+
+				<h2 id="crudBlankTitle">Edit Post</h2>
+				<form class="lift:AllPosts.delete">
+					<input type="submit" value="Delete Post" /> 
+				</form> 
+
+				<div class="objectForm">
+					<div class="lift:msgs?showAll=true"></div>
+					<form class="lift:AllPostsEdit?form=post">
+                        <div id="post-display">
+                            <div class="crudField crud_text">
+                                <label for="object_title"> Title </label>
+                                <input id="object_title" class="mb:title" type="text" name="title" value="" size="50" /> <span class="crudHelp"> Required.
+                                </span>
+                            </div>
+
+                            <div class="crudField crud_date">
+                                <label for="object_postedAt"> Posted at </label> <input
+                                    id="object_postedAt" class="mb:postedAt" type="text" name="postedAt"
+                                    value="" size="10" /> <span class="crudHelp"> yyyy-MM-dd
+                                    format. Required. </span>
+                            </div>
+
+                            <div class="crudField crud_longtext">
+                                <label for="object_content"> Content </label>
+                                <textarea id="object_content" cols="48" rows="5" class="mb:content"
+                                    name="content"></textarea>
+                                <span class="crudHelp"> Required. Max length is 10000. </span>
+                            </div>
+
+                            <div class="crudField crud_relation">
+                                <label for="object_author"> Author </label>
+                                <select id="object_author" name="author_id" class="mb:author">
+
+                                </select>
+                                <span class="crudHelp"> Required. </span>
+                            </div>
+                        </div>
+                        <div class="crudField crud_relation">
+
+                            <label for="tags">
+                                Tags set
+                            </label>
+
+                            <div class="tags-list">
+                                <span class="tags-list-item">
+                                    <span id="1" onclick="toggle(this)" class="tag selected">Play</span>
+                                    <input id="h1" type="hidden" name="tags_name" value=""/>
+                                </span>
+                                <input type="hidden" id="tags_name_list" name="tags_name_list" value="" />
+                            </div>
+                        </div>
+
+						<p class="crudButtons">
+							<input type="submit" name="_save" value="Save" onclick="return prepareTags();" />
+						</p>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

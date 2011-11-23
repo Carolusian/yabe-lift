@@ -1,0 +1,27 @@
+<div class="lift:surround?with=default;at=content">
+    <head_merge>
+        <title class="lift:Posts.titlePostsByTag"></title>
+    </head_merge>
+    <div class="older-posts">
+        <h3 class="lift:Posts.getTag">
+            These are posts tagged with '<span></span>'
+        </h3>
+
+        <div class="lift:Posts.listPostsByTag post teaser">
+            <h2 class="post-title">
+                <a class="post-title-link" href="/read/@id">@title</a>
+            </h2>
+
+            <div class="post-metadata">
+                <span class="post-author">by @author.first @author.last</span>,
+                <span class="post-date">
+                    @postedAt
+                </span>
+                <span class="post-comments">
+                    &nbsp;|&nbsp; no
+					comments
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
