@@ -1,4 +1,4 @@
-package code
+/*package code
 package snippet
 
 import org.specs._
@@ -40,4 +40,4 @@ object HelloWorldTestSpecs extends Specification {
       str.indexOf("Hello at") must be >= 0
     }
   }
-}
+}*/

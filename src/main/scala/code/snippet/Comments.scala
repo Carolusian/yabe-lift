@@ -12,7 +12,7 @@ import java.util.Date
 import Helpers._
 import code.model._
 import code.lib._
-import MapperBinder._
+import ModelBinder._
 import code.comet._
 
 class Comments {
@@ -70,7 +70,7 @@ class Comments {
     "tr" #> comments.map {
       c =>
         odd = YabeHelper.oddOrEven(odd)
-        ".comment_item" #> bindMapper(c, {"tr [class]" #> odd}) _
+        ".comment_item" #> bindModel(c, {"tr [class]" #> odd}) _
 
     }
   }
@@ -165,7 +165,7 @@ class CommentsEdit extends StatefulSnippet {
     }
 
     "*" #>
-      bindMapper(comment, {
+      bindModel(comment, {
         "type=submit" #> SHtml.onSubmitUnit(() => process)
       }) _
 

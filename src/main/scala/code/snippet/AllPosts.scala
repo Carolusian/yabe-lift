@@ -8,7 +8,7 @@ import Helpers._
 import code.model._
 import code.lib._
 import net.liftweb.mapper.By._
-import code.lib.MapperBinder._
+import code.lib.ModelBinder._
 
 class AllPosts {
 
@@ -120,7 +120,7 @@ class AllPostsAdd extends StatefulSnippet {
     }
 
 
-    "#post-display" #> bindMapper(post) _ &
+    "#post-display" #> bindModel(post) _ &
       renderTags(PostTag.findAll(By(PostTag.post, post.id)).map(_.tag.get)) &
       "type=submit" #> SHtml.onSubmitUnit(() => process)
   }
@@ -147,7 +147,7 @@ class AllPostsEdit extends StatefulSnippet {
       }
     }
 
-    "#post-display" #> bindMapper(post) _ &
+    "#post-display" #> bindModel(post) _ &
       renderTags(PostTag.findAll(By(PostTag.post, post.id)).map(_.tag.get)) &
       "type=submit" #> SHtml.onSubmitUnit(() => process)
   }

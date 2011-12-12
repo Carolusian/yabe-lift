@@ -1,4 +1,4 @@
-package code
+/*package code
 
 import java.io.File
 
@@ -61,4 +61,4 @@ object XmlSourceSpecs extends Specification {
       numFails must_== 0
     }
   }
-}
+}*/

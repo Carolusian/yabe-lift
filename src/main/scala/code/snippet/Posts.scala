@@ -9,16 +9,16 @@ import java.util.Date
 import Helpers._
 import code.model._
 import code.lib._
-import MapperBinder._
+import ModelBinder._
 
 class Posts {
   def listLatest: CssSel = {
     val latestPost = Post.find(OrderBy(Post.id, Descending))
-    //"*" #> bindMapper()
+    //"*" #> bindModel()
 
     latestPost match {
       case Full(p) => {
-        "*" #> bindMapper(p,{
+        "*" #> bindModel(p,{
           ".post-comments *" #> (" | " + p.countComments + " comments " + p.latestCommentAuthor)
         }) _
       }
@@ -57,7 +57,7 @@ class Posts {
   private def renderPostsList(posts:List[Post]):CssSel = {
    "*" #> posts.map {
     p =>
-      "*" #> bindMapper(p,{
+      "*" #> bindModel(p,{
         ".post-comments *" #> (" | " + p.countComments + " comments " + p.latestCommentAuthor)
       }) _
     }
@@ -76,7 +76,7 @@ class Posts {
 
     post match {
       case Full(p) => {
-        "*" #> bindMapper(p, {".post-tags *" #> Unparsed(p.showTagMetaStr) }) _
+        "*" #> bindModel(p, {".post-tags *" #> Unparsed(p.showTagMetaStr) }) _
       }
       case _ => "*" #> ""
     }
@@ -151,7 +151,7 @@ class Posts {
       }
     }
 
-    "#post-add" #> bindMapper(post) _ &
+    "#post-add" #> bindModel(post) _ &
       "type=submit" #> SHtml.onSubmitUnit(() => process)
   }
 
@@ -172,7 +172,7 @@ class Posts {
     if (post.author.toLong != User.currentUserId.openTheBox.toLong) {
       "*" #> <span>Sorry, you do not have permission to edit this post in this page.</span>
     } else {
-      "#post-edit" #> bindMapper(post) _ &
+      "#post-edit" #> bindModel(post) _ &
         "name=tags" #> SHtml.text(post.tags.concat, post.tags.setMultiple(post, _)) &
         "type=submit" #> SHtml.onSubmitUnit(process)
     }
