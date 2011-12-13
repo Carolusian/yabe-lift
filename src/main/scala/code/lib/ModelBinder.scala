@@ -117,7 +117,7 @@ trait ModelBinder {
         }
       }
 
-      def invokeFuncOfField[A](field:FT, method:String , matchStr:String):Node = {
+      def invokeFuncOfField(field:FT, method:String , matchStr:String):Node = {
         //If the method is validate method the has no argument and return a Node, invoke it
         val clazz = field.getClass
         val methods = clazz.getMethods()
